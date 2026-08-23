@@ -15,7 +15,7 @@ export interface CreateInvoiceInput {
   items: InvoiceItemInput[];
 }
 
-export class BillSathiService {
+export class HisabSajiloService {
   constructor(private readonly db: SupabaseClient) {}
 
   createInvoice(input: CreateInvoiceInput) {

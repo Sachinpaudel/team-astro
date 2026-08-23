@@ -1,6 +1,6 @@
-# BillSathi
+# HisabSajilo
 
-BillSathi includes a responsive React prototype based on the supplied Figma layout and is configured for the existing Supabase project **Hackfeast** (`pzgkxngxvineflxkmifz`). The current demo login and screen records remain local mock data while the database-backed authentication phase is built; the publishable Supabase client and schema are ready for that integration.
+HisabSajilo includes a responsive React prototype based on the supplied Figma layout and is configured for the existing Supabase project **Hackfeast** (`pzgkxngxvineflxkmifz`). The current demo login and screen records remain local mock data while the database-backed authentication phase is built; the publishable Supabase client and schema are ready for that integration.
 
 ## UI prototype
 
@@ -26,7 +26,7 @@ Frontend entry points live in `src/ui/`, with application routing in `src/ui/App
 
 ## Backend foundation
 
-BillSathi's backend foundation is implemented as a Supabase-first system: Supabase Auth owns credentials and sessions; PostgreSQL owns authorization, invoice calculations, payment state transitions, immutable final bills, audit history, and dashboard aggregates; private Supabase Storage buckets hold documents and payment evidence. The future frontend can use the small TypeScript client in `src/` or call the same RPCs directly.
+HisabSajilo's backend foundation is implemented as a Supabase-first system: Supabase Auth owns credentials and sessions; PostgreSQL owns authorization, invoice calculations, payment state transitions, immutable final bills, audit history, and dashboard aggregates; private Supabase Storage buckets hold documents and payment evidence. The future frontend can use the small TypeScript client in `src/` or call the same RPCs directly.
 
 ## Architecture
 
@@ -62,7 +62,7 @@ supabase/config.toml                 local Supabase configuration
 supabase/migrations/*_initial.sql    schema, RLS, storage, RPCs
 supabase/tests/core_workflow.sql     pgTAP integration tests
 src/auth.ts                          Auth/session facade
-src/billsathi.ts                     typed invoice/payment/dashboard facade
+src/hisabsajilo.ts                     typed invoice/payment/dashboard facade
 src/ird.ts                           inert future-integration abstraction
 src/index.ts                         exports
 ```
