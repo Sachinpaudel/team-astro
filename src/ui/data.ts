@@ -1,4 +1,4 @@
-export type Status = 'Paid' | 'Pending' | 'Overdue' | 'Rejected' | 'Verified' | 'Flagged';
+export type Status = 'Paid' | 'Pending' | 'Agreement Pending' | 'Payment Pending' | 'Overdue' | 'Rejected' | 'Verified' | 'Flagged';
 
 export const businessInvoices = [
   { id: 'INV-2025-001', customer: 'Kathmandu Repair Hub', date: 'Aug 12, 2025', amount: 'NPR 1,25,000', status: 'Pending' as Status },
@@ -8,9 +8,9 @@ export const businessInvoices = [
 ];
 
 export const customerInvoices = [
-  { id: 'INV-2025-034', customer: 'TechNova Solutions', date: 'Oct 08, 2025', amount: 'NPR 15,000', status: 'Pending' as Status },
+  { id: 'INV-2025-034', customer: 'TechNova Solutions', date: 'Oct 08, 2025', amount: 'NPR 15,000', status: 'Agreement Pending' as Status },
   { id: 'INV-2025-031', customer: 'Himalayan Legal', date: 'Oct 04, 2025', amount: 'NPR 8,500', status: 'Paid' as Status },
-  { id: 'INV-2025-028', customer: 'Everest Marketing', date: 'Sep 30, 2025', amount: 'NPR 21,200', status: 'Overdue' as Status },
+  { id: 'INV-2025-028', customer: 'Everest Marketing', date: 'Sep 30, 2025', amount: 'NPR 21,200', status: 'Payment Pending' as Status },
   { id: 'INV-2025-022', customer: 'Kathmandu Consultants', date: 'Sep 18, 2025', amount: 'NPR 12,500', status: 'Paid' as Status },
 ];
 
