@@ -9,7 +9,7 @@ export class AuthService {
     return this.db.auth.signUp({
       email,
       password,
-      options: { data: { signup_role: role, full_name: fullName } },
+      options: { data: { role, full_name: fullName } },
     });
   }
 
@@ -30,12 +30,11 @@ export class AuthService {
     if (userError) throw userError;
     if (!userData.user) return null;
     const { data, error } = await this.db
-      .from('profiles')
-      .select('role, account_status')
+      .from('users')
+      .select('role, status')
       .eq('id', userData.user.id)
       .single();
     if (error) throw error;
-    return data as { role: 'business' | 'customer' | 'admin'; account_status: string };
+    return data as { role: 'business' | 'customer' | 'admin' | 'ird_officer'; status: string };
   }
 }
-

@@ -10,49 +10,30 @@ interface DownloadInvoice {
   vat: number;
   total: number;
   vatRegistered: boolean;
+  paymentMethod: 'Cash' | 'Online';
 }
 
 export async function downloadInvoicePdf(invoice: DownloadInvoice) {
   const { jsPDF } = await import('jspdf');
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
-  const blue: [number,number,number] = [20,117,200];
-  doc.setFillColor(...blue); doc.rect(0,0,210,7,'F');
-  doc.setTextColor(...blue); doc.setFontSize(18); doc.setFont('helvetica','bold');
-  doc.text(invoice.vatRegistered ? 'TAX INVOICE' : 'SALES INVOICE', 105, 20, { align:'center' });
-  doc.setFontSize(9); doc.setTextColor(90,105,122);
-  doc.text(invoice.vatRegistered ? 'VAT taxable supply - Nepal' : 'Non-VAT registered seller',105,26,{align:'center'});
-
-  doc.setFontSize(15); doc.setTextColor(25,36,50); doc.text(invoice.seller,15,40);
-  doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(85,99,116);
-  doc.text('New Baneshwor, Kathmandu, Nepal',15,46);
-  doc.text('PAN: 302145678',15,51);
-  if(invoice.vatRegistered) doc.text('VAT No: 302145678',15,56);
-  doc.setTextColor(25,36,50); doc.setFont('helvetica','bold'); doc.text(invoice.id,195,40,{align:'right'});
-  doc.setFont('helvetica','normal'); doc.setTextColor(85,99,116); doc.text(`Invoice date: ${invoice.date}`,195,46,{align:'right'}); doc.text(`Status: ${invoice.status}`,195,51,{align:'right'});
-
-  doc.setDrawColor(220,227,235); doc.line(15,65,195,65);
-  doc.setFont('helvetica','bold'); doc.setTextColor(20,117,200); doc.text('BILL TO',15,73);
-  doc.setTextColor(25,36,50); doc.setFontSize(11); doc.text(invoice.buyer,15,80);
-  doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(85,99,116); doc.text('Kathmandu, Nepal',15,86);
-
-  const y=98; doc.setFillColor(242,247,252); doc.rect(15,y,180,10,'F');
-  doc.setTextColor(55,73,93); doc.setFont('helvetica','bold');
-  doc.text('S.N.',18,y+6); doc.text('PARTICULARS',32,y+6); doc.text('QTY',135,y+6); doc.text('RATE',155,y+6); doc.text('AMOUNT',193,y+6,{align:'right'});
-  doc.setFont('helvetica','normal'); doc.setTextColor(40,52,67); doc.text('1',18,y+18); doc.text('Professional service charge',32,y+18); doc.text('1',135,y+18); doc.text(`NPR ${invoice.subtotal.toLocaleString()}`,155,y+18); doc.text(`NPR ${invoice.subtotal.toLocaleString()}`,193,y+18,{align:'right'});
-  doc.setDrawColor(225,231,238); doc.line(15,y+23,195,y+23);
-
-  let ty=y+35; doc.text('Subtotal',145,ty); doc.setFont('helvetica','bold'); doc.text(`NPR ${invoice.subtotal.toLocaleString()}`,193,ty,{align:'right'});
-  if(invoice.vatRegistered){ty+=8;doc.setFont('helvetica','normal');doc.text('VAT @ 13%',145,ty);doc.setFont('helvetica','bold');doc.text(`NPR ${invoice.vat.toLocaleString()}`,193,ty,{align:'right'});}
-  ty+=10;doc.setDrawColor(20,117,200);doc.line(142,ty-6,195,ty-6);doc.setFontSize(12);doc.setTextColor(...blue);doc.text('GRAND TOTAL',142,ty);doc.text(`NPR ${invoice.total.toLocaleString()}`,193,ty,{align:'right'});
-
-  doc.setFontSize(9); doc.setTextColor(70,84,100); doc.setFont('helvetica','normal');
-  doc.text('Amount in words: Fifteen thousand rupees only',15,165);
-  doc.text('Payment method: Fonepay QR / Bank transfer',15,174);
-  doc.line(145,188,195,188); doc.text('Authorized signature',170,194,{align:'center'});
-  doc.setFillColor(246,248,251); doc.rect(15,210,180,18,'F'); doc.setFontSize(8);
-  const note=invoice.vatRegistered?'VAT is charged because the seller is VAT registered. Prototype document - not IRD certified.':'VAT is not charged and no VAT number is displayed because the seller is not VAT registered.';
-  doc.text(doc.splitTextToSize(note,170),20,219);
-  doc.setFillColor(...blue);doc.rect(0,290,210,7,'F');
+  const left=15, right=195, width=180; doc.setTextColor(28,28,28); doc.setDrawColor(30,30,30);
+  doc.setFont('helvetica','normal');doc.setFontSize(12);doc.text(invoice.vatRegistered?'TAX INVOICE':'BILL',105,16,{align:'center'});
+  doc.roundedRect(left,21,width,31,1,1);
+  doc.setFont('helvetica','bold');doc.setFontSize(20);doc.text(invoice.seller,105,33,{align:'center'});
+  doc.setFont('helvetica','normal');doc.setFontSize(10);doc.text('New Baneshwor, Kathmandu',105,40,{align:'center'});doc.text('Ph: +977-9800000000',105,46,{align:'center'});
+  if(invoice.vatRegistered){doc.setFontSize(11);doc.text('VAT No: 302145678',190,29,{align:'right'});}
+  doc.setFontSize(10); const billNo=`083/84-${invoice.id.slice(-6)}`;
+  doc.text("Buyer's Name",left,64);doc.text(`: ${invoice.buyer}`,47,64);doc.text('Bill No.',108,64);doc.text(`: ${billNo}`,140,64);
+  doc.text("Buyer's Address",left,72);doc.text(': Kathmandu',47,72);doc.text('Bill Date',108,72);doc.text(': 2083-05-01',140,72);
+  doc.text('Mode',left,80);doc.text(`: ${invoice.paymentMethod}`,47,80);
+  const y=92;doc.setFillColor(242,242,242);doc.rect(left,y,width,9,'FD');doc.line(34,y,34,y+22);doc.line(160,y,160,y+22);doc.setFont('helvetica','bold');doc.text('SNo',18,y+6);doc.text('Particulars',37,y+6);doc.text('Amount',190,y+6,{align:'right'});
+  doc.setFont('helvetica','normal');doc.rect(left,y+9,width,13);doc.text('1',18,y+17);doc.text('Professional service charge - as agreed',37,y+17);doc.text(invoice.subtotal.toLocaleString(undefined,{minimumFractionDigits:2}),190,y+17,{align:'right'});
+  const boxY=y+22, boxH=invoice.vatRegistered?37:24;doc.rect(left,boxY,98,boxH);doc.setFont('helvetica','bold');doc.text('Amount in words:',18,boxY+8);doc.setFont('helvetica','normal');doc.text(doc.splitTextToSize('(Rs. Fifteen Thousand only)',88),18,boxY+16);
+  doc.rect(117,boxY,78,boxH);doc.line(145,boxY,145,boxY+boxH);let rowY=boxY;
+  const summary:[string,number][]=[['Sub Total',invoice.subtotal]];if(invoice.vatRegistered){summary.push(['Taxable Amt.',invoice.subtotal],['VAT @ 13%',invoice.vat])}summary.push(['Grand Total',invoice.total]);
+  const rowH=boxH/summary.length;summary.forEach(([label,value],i)=>{if(i)doc.line(117,rowY,195,rowY);doc.setFont('helvetica',i===summary.length-1?'bold':'normal');doc.text(label,120,rowY+rowH*.65);doc.text(value.toLocaleString(undefined,{minimumFractionDigits:2}),190,rowY+rowH*.65,{align:'right'});rowY+=rowH});
+  const footerY=boxY+boxH+18;doc.setFont('helvetica','normal');doc.text('E. & O.E.',left,footerY);doc.text('Thank you.',left,footerY+7);doc.line(148,footerY-2,195,footerY-2);doc.text(invoice.seller,171.5,footerY+5,{align:'center'});doc.setFontSize(8);doc.text(`For, ${invoice.seller}`,171.5,footerY+11,{align:'center'});
+  doc.setFontSize(9);doc.text(`Bill #${billNo} - generated electronically, no physical signature required.`,left,footerY+24);
   doc.save(`${invoice.id}-${invoice.vatRegistered?'tax-invoice':'invoice'}.pdf`);
 }
 

@@ -87,13 +87,13 @@ The Hackfeast remote schema is authoritative. Do not push the older prototype mi
 
 ## Core API flow
 
-1. `auth.signUp()` creates an Auth user; the trigger creates its profile using only a validated `business` or `customer` role.
-2. The user inserts their own `businesses` or `customers` row.
-3. A business calls `create_invoice(customer_id, due_date, vat_rate, items, ...)`. PostgreSQL validates ownership and the 0–7 day deadline, calculates item totals/VAT, and records `invoice_created`.
-4. The customer calls `mark_invoice_paid(invoice_id, reference, proof_path, note)`.
-5. The business calls `review_payment(payment_id, true|false, note)`.
-6. Confirmation locks the payment and invoice, marks them verified/paid, creates the immutable transaction snapshot, and appends an audit event in one database transaction.
-7. Dashboard RPCs aggregate verified transactions; no editable dashboard totals exist.
+1. `auth.signUp()` creates an Auth user; Hackfeast creates the matching `users` record from the validated `role` metadata.
+2. The authenticated user completes either `business_profiles` or `customer_profiles` and uploads verification files to private Storage.
+3. A business finds the customer through `lookup_customer_by_phone()` and inserts an agreement into `invoices`.
+4. Either party calls `respond_to_invoice()` to accept, reject, or counter while the agreement is open.
+5. After work is completed, the customer calls `mark_payment_paid()` and the business verifies payment using the database workflow.
+6. PostgreSQL creates the final immutable record in `bills`; invoices remain the negotiable agreement history.
+7. Users create support requests in `support_tickets` and invoice reports in `flagged_invoices`, protected by RLS.
 
 ## Deploy
 
