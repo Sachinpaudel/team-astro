@@ -1,0 +1,32 @@
+{
+  "name": "billsathi",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "test:db": "supabase test db"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.57.4",
+    "@vitejs/plugin-react": "latest",
+    "jspdf": "4.2.1",
+    "lucide-react": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-router-dom": "latest",
+    "vite": "latest"
+  },
+  "devDependencies": {
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "supabase": "2.115.0",
+    "typescript": "5.9.2"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
