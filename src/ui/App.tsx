@@ -22,7 +22,7 @@ function Metric({ label, value, detail, tone = 'blue', icon }: { label: string; 
 }
 
 function Brand({ admin = false }: { admin?: boolean }) {
-  return <div className="brand"><span className="brand-mark"><FileText size={18} /></span><div><b>HisabSajilo{admin ? ' Admin' : ''}</b><small>{admin ? 'Control Center' : 'Digital Billing'}</small></div></div>;
+  return <div className="brand"><span className="brand-mark brand-logo" aria-hidden="true" /><div><b>HisabSajilo{admin ? ' Admin' : ''}</b><small>{admin ? 'Control Center' : 'Digital Billing'}</small></div></div>;
 }
 
 const navByRole: Record<Role, { label: string; path: string; icon: ReactNode }[]> = {
