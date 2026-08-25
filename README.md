@@ -5,7 +5,6 @@ HisabSajilo includes a responsive React prototype based on the supplied Figma la
 ## UI prototype
 
 Run it with:
-
 ```bash
 npm install
 npm run dev
